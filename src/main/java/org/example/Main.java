@@ -1,9 +1,9 @@
 package org.example;
 
-import org.example.Map.MapFrame;
+import org.example.UI.MapViewer;
 
 public class Main {
     public static void main(String[] args) {
-        new MapFrame();
+        new MapViewer().start();
     }
 }
