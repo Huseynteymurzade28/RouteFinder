@@ -436,8 +436,12 @@ public class MapViewer {
 
     private void findAndDrawRoute() {
         if (startNode == null || endNode == null) {
-            JOptionPane.showMessageDialog(null, "Başlangıç veya bitiş noktası seçilmedi.",
-                    "Hata", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(
+                    null,
+                    "Başlangıç veya bitiş noktası seçilmedi.",
+                    "Hata",
+                    JOptionPane.ERROR_MESSAGE
+            );
             return;
         }
 
@@ -445,26 +449,43 @@ public class MapViewer {
         List<List<Node>> steps = dijkstra.findShortestPath(startNode, endNode);
 
         if (steps.isEmpty() || steps.get(steps.size() - 1).isEmpty()) {
-            JOptionPane.showMessageDialog(null, "Bu noktalar arasında rota bulunamadı. Lütfen başka noktalar seçin.",
-                    "Rota Bulunamadı", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(
+                    null,
+                    "Bu noktalar arasında rota bulunamadı. Lütfen başka noktalar seçin.",
+                    "Rota Bulunamadı",
+                    JOptionPane.WARNING_MESSAGE
+            );
             statusLabel.setText("Rota bulunamadı. Lütfen tekrar deneyin.");
             return;
         }
 
         List<Node> shortestPath = steps.get(steps.size() - 1);
-        selectedRoute = shortestPath.stream().map(Node::getPosition).collect(Collectors.toList());
-        routePainter = new RoutePainter(selectedRoute, Color.RED);
+        selectedRoute = shortestPath.stream()
+                .map(Node::getPosition)
+                .collect(Collectors.toList());
 
-        // Add fade-in animation for the route
+        // Mavi rota (sabit çizgi)
+        RoutePainter blueRoutePainter = new RoutePainter(selectedRoute, Color.BLUE);
+        mapViewer.setOverlayPainter(blueRoutePainter);
+
+        // Kırmızı animasyonlu rota (fade-in)
+        routePainter = new RoutePainter(selectedRoute, Color.RED);
         animateRouteFadeIn();
 
         double totalDistance = calculatePathDistance(shortestPath);
         statusLabel.setText(String.format("Rota bulundu! Toplam mesafe: %.2f km", totalDistance));
 
-        MapAnimation mapAnimation = new MapAnimation(mapViewer, steps, selectedRoute, new ArrayList<>(nodePainters));
+        MapAnimation mapAnimation = new MapAnimation(
+                mapViewer,
+                steps,
+                selectedRoute,
+                new ArrayList<>(nodePainters)
+        );
+
         JPanel animationPanel = mapAnimation.getControlPanel();
         animationPanel.setVisible(true);
     }
+
 
     private void animateRouteFadeIn() {
         Timer timer = new Timer(50, null);
