@@ -1,0 +1,488 @@
+{
+    "segments": [
+        {
+            "from": "Nizami",
+            "to": "28 May",
+            "tip": "yurume",
+            "mesafe_km": 2.01,
+            "sure_dk": 24,
+            "aciklama": "Nizami → 28 May arasında yurume ile seyahat."
+        },
+        {
+            "from": "28 May",
+            "to": "Həzi Aslanov",
+            "tip": "metro",
+            "mesafe_km": 2.13,
+            "sure_dk": 3,
+            "aciklama": "28 May → Həzi Aslanov arasında metro ile seyahat.",
+            "hat": "2"
+        },
+        {
+            "from": "Həzi Aslanov",
+            "to": "Əhmədli",
+            "tip": "otobus",
+            "mesafe_km": 3.95,
+            "sure_dk": 8,
+            "aciklama": "Həzi Aslanov → Əhmədli arasında otobus ile seyahat.",
+            "hat": "3"
+        },
+        {
+            "from": "Əhmədli",
+            "to": "Xalqlar Dostluğu",
+            "tip": "taksi",
+            "mesafe_km": 1.59,
+            "sure_dk": 2,
+            "aciklama": "Əhmədli → Xalqlar Dostluğu arasında taksi ile seyahat."
+        },
+        {
+            "from": "Xalqlar Dostluğu",
+            "to": "Neftçilər",
+            "tip": "yurume",
+            "mesafe_km": 2.44,
+            "sure_dk": 29,
+            "aciklama": "Xalqlar Dostluğu → Neftçilər arasında yurume ile seyahat."
+        },
+        {
+            "from": "Neftçilər",
+            "to": "İçərişəhər",
+            "tip": "metro",
+            "mesafe_km": 2.13,
+            "sure_dk": 3,
+            "aciklama": "Neftçilər → İçərişəhər arasında metro ile seyahat.",
+            "hat": "6"
+        },
+        {
+            "from": "İçərişəhər",
+            "to": "Sahil",
+            "tip": "otobus",
+            "mesafe_km": 1.1,
+            "sure_dk": 2,
+            "aciklama": "İçərişəhər → Sahil arasında otobus ile seyahat.",
+            "hat": "7"
+        },
+        {
+            "from": "Sahil",
+            "to": "Elmlər Akademiyası",
+            "tip": "taksi",
+            "mesafe_km": 1.44,
+            "sure_dk": 2,
+            "aciklama": "Sahil → Elmlər Akademiyası arasında taksi ile seyahat."
+        },
+        {
+            "from": "Elmlər Akademiyası",
+            "to": "Memar Əcəmi",
+            "tip": "yurume",
+            "mesafe_km": 2.09,
+            "sure_dk": 25,
+            "aciklama": "Elmlər Akademiyası → Memar Əcəmi arasında yurume ile seyahat."
+        },
+        {
+            "from": "Memar Əcəmi",
+            "to": "Bakmil",
+            "tip": "metro",
+            "mesafe_km": 6.14,
+            "sure_dk": 9,
+            "aciklama": "Memar Əcəmi → Bakmil arasında metro ile seyahat.",
+            "hat": "10"
+        },
+        {
+            "from": "Bakmil",
+            "to": "Ulduz",
+            "tip": "otobus",
+            "mesafe_km": 1.82,
+            "sure_dk": 4,
+            "aciklama": "Bakmil → Ulduz arasında otobus ile seyahat.",
+            "hat": "11"
+        },
+        {
+            "from": "Ulduz",
+            "to": "Koroğlu",
+            "tip": "taksi",
+            "mesafe_km": 1.03,
+            "sure_dk": 1,
+            "aciklama": "Ulduz → Koroğlu arasında taksi ile seyahat."
+        },
+        {
+            "from": "Koroğlu",
+            "to": "Qara Qarayev",
+            "tip": "yurume",
+            "mesafe_km": 0.87,
+            "sure_dk": 10,
+            "aciklama": "Koroğlu → Qara Qarayev arasında yurume ile seyahat."
+        },
+        {
+            "from": "Qara Qarayev",
+            "to": "Avtovağzal",
+            "tip": "metro",
+            "mesafe_km": 2.54,
+            "sure_dk": 4,
+            "aciklama": "Qara Qarayev → Avtovağzal arasında metro ile seyahat.",
+            "hat": "14"
+        },
+        {
+            "from": "Avtovağzal",
+            "to": "Nəsimi",
+            "tip": "otobus",
+            "mesafe_km": 2.02,
+            "sure_dk": 4,
+            "aciklama": "Avtovağzal → Nəsimi arasında otobus ile seyahat.",
+            "hat": "15"
+        },
+        {
+            "from": "Nəsimi",
+            "to": "Azadlıq prospekti",
+            "tip": "taksi",
+            "mesafe_km": 1.37,
+            "sure_dk": 2,
+            "aciklama": "Nəsimi → Azadlıq prospekti arasında taksi ile seyahat."
+        },
+        {
+            "from": "Azadlıq prospekti",
+            "to": "Dərnəgül",
+            "tip": "yurume",
+            "mesafe_km": 5.81,
+            "sure_dk": 70,
+            "aciklama": "Azadlıq prospekti → Dərnəgül arasında yurume ile seyahat."
+        },
+        {
+            "from": "Dərnəgül",
+            "to": "Gənclik",
+            "tip": "metro",
+            "mesafe_km": 5.19,
+            "sure_dk": 8,
+            "aciklama": "Dərnəgül → Gənclik arasında metro ile seyahat.",
+            "hat": "18"
+        },
+        {
+            "from": "Gənclik",
+            "to": "20 Yanvar",
+            "tip": "otobus",
+            "mesafe_km": 1.81,
+            "sure_dk": 4,
+            "aciklama": "Gənclik → 20 Yanvar arasında otobus ile seyahat.",
+            "hat": "19"
+        },
+        {
+            "from": "20 Yanvar",
+            "to": "Cəfər Cabbarlı",
+            "tip": "taksi",
+            "mesafe_km": 1.73,
+            "sure_dk": 2,
+            "aciklama": "20 Yanvar → Cəfər Cabbarlı arasında taksi ile seyahat."
+        },
+        {
+            "from": "Cəfər Cabbarlı",
+            "to": "Şah İsmail Xətai",
+            "tip": "yurume",
+            "mesafe_km": 2.39,
+            "sure_dk": 29,
+            "aciklama": "Cəfər Cabbarlı → Şah İsmail Xətai arasında yurume ile seyahat."
+        },
+        {
+            "from": "Şah İsmail Xətai",
+            "to": "Sülh",
+            "tip": "metro",
+            "mesafe_km": 1.2,
+            "sure_dk": 2,
+            "aciklama": "Şah İsmail Xətai → Sülh arasında metro ile seyahat.",
+            "hat": "22"
+        },
+        {
+            "from": "Sülh",
+            "to": "İnşaatçılar",
+            "tip": "otobus",
+            "mesafe_km": 4.78,
+            "sure_dk": 10,
+            "aciklama": "Sülh → İnşaatçılar arasında otobus ile seyahat.",
+            "hat": "23"
+        },
+        {
+            "from": "İnşaatçılar",
+            "to": "8 Noyabr",
+            "tip": "taksi",
+            "mesafe_km": 3.66,
+            "sure_dk": 4,
+            "aciklama": "İnşaatçılar → 8 Noyabr arasında taksi ile seyahat."
+        },
+        {
+            "from": "8 Noyabr",
+            "to": "Ziya Bünyadov",
+            "tip": "yurume",
+            "mesafe_km": 4.56,
+            "sure_dk": 55,
+            "aciklama": "8 Noyabr → Ziya Bünyadov arasında yurume ile seyahat."
+        },
+        {
+            "from": "Ziya Bünyadov",
+            "to": "Nariman Narimanov",
+            "tip": "metro",
+            "mesafe_km": 3.28,
+            "sure_dk": 5,
+            "aciklama": "Ziya Bünyadov → Nariman Narimanov arasında metro ile seyahat.",
+            "hat": "26"
+        },
+        {
+            "from": "Nariman Narimanov",
+            "to": "Kərimov",
+            "tip": "otobus",
+            "mesafe_km": 4.09,
+            "sure_dk": 8,
+            "aciklama": "Nariman Narimanov → Kərimov arasında otobus ile seyahat.",
+            "hat": "27"
+        },
+        {
+            "from": "Kərimov",
+            "to": "Mərdəkan",
+            "tip": "taksi",
+            "mesafe_km": 5.25,
+            "sure_dk": 6,
+            "aciklama": "Kərimov → Mərdəkan arasında taksi ile seyahat."
+        },
+        {
+            "from": "Mərdəkan",
+            "to": "Biləcəri",
+            "tip": "yurume",
+            "mesafe_km": 0.91,
+            "sure_dk": 11,
+            "aciklama": "Mərdəkan → Biləcəri arasında yurume ile seyahat."
+        },
+        {
+            "from": "Biləcəri",
+            "to": "Lokbatan",
+            "tip": "metro",
+            "mesafe_km": 13.21,
+            "sure_dk": 20,
+            "aciklama": "Biləcəri → Lokbatan arasında metro ile seyahat.",
+            "hat": "30"
+        },
+        {
+            "from": "Lokbatan",
+            "to": "Binə",
+            "tip": "otobus",
+            "mesafe_km": 16.1,
+            "sure_dk": 32,
+            "aciklama": "Lokbatan → Binə arasında otobus ile seyahat.",
+            "hat": "31"
+        },
+        {
+            "from": "Binə",
+            "to": "Sumqayıt",
+            "tip": "taksi",
+            "mesafe_km": 20.72,
+            "sure_dk": 25,
+            "aciklama": "Binə → Sumqayıt arasında taksi ile seyahat."
+        },
+        {
+            "from": "Sumqayıt",
+            "to": "Hövsan",
+            "tip": "yurume",
+            "mesafe_km": 26.47,
+            "sure_dk": 318,
+            "aciklama": "Sumqayıt → Hövsan arasında yurume ile seyahat."
+        },
+        {
+            "from": "Hövsan",
+            "to": "Şüvəlan",
+            "tip": "metro",
+            "mesafe_km": 12.59,
+            "sure_dk": 19,
+            "aciklama": "Hövsan → Şüvəlan arasında metro ile seyahat.",
+            "hat": "34"
+        },
+        {
+            "from": "Şüvəlan",
+            "to": "Badamdar",
+            "tip": "otobus",
+            "mesafe_km": 13.03,
+            "sure_dk": 26,
+            "aciklama": "Şüvəlan → Badamdar arasında otobus ile seyahat.",
+            "hat": "35"
+        },
+        {
+            "from": "Badamdar",
+            "to": "Buzovna",
+            "tip": "taksi",
+            "mesafe_km": 32.39,
+            "sure_dk": 39,
+            "aciklama": "Badamdar → Buzovna arasında taksi ile seyahat."
+        },
+        {
+            "from": "Buzovna",
+            "to": "Məmmədli",
+            "tip": "yurume",
+            "mesafe_km": 28.89,
+            "sure_dk": 347,
+            "aciklama": "Buzovna → Məmmədli arasında yurume ile seyahat."
+        },
+        {
+            "from": "Məmmədli",
+            "to": "Zirə",
+            "tip": "metro",
+            "mesafe_km": 12.27,
+            "sure_dk": 18,
+            "aciklama": "Məmmədli → Zirə arasında metro ile seyahat.",
+            "hat": "38"
+        },
+        {
+            "from": "Zirə",
+            "to": "Qobustan",
+            "tip": "otobus",
+            "mesafe_km": 84.55,
+            "sure_dk": 169,
+            "aciklama": "Zirə → Qobustan arasında otobus ile seyahat.",
+            "hat": "39"
+        },
+        {
+            "from": "Qobustan",
+            "to": "Hökməli",
+            "tip": "taksi",
+            "mesafe_km": 78.61,
+            "sure_dk": 94,
+            "aciklama": "Qobustan → Hökməli arasında taksi ile seyahat."
+        },
+        {
+            "from": "Hökməli",
+            "to": "Qala",
+            "tip": "yurume",
+            "mesafe_km": 2.87,
+            "sure_dk": 34,
+            "aciklama": "Hökməli → Qala arasında yurume ile seyahat."
+        },
+        {
+            "from": "Qala",
+            "to": "Şağan",
+            "tip": "metro",
+            "mesafe_km": 3.97,
+            "sure_dk": 6,
+            "aciklama": "Qala → Şağan arasında metro ile seyahat.",
+            "hat": "42"
+        },
+        {
+            "from": "Şağan",
+            "to": "Bülbülə",
+            "tip": "otobus",
+            "mesafe_km": 7.29,
+            "sure_dk": 15,
+            "aciklama": "Şağan → Bülbülə arasında otobus ile seyahat.",
+            "hat": "43"
+        },
+        {
+            "from": "Bülbülə",
+            "to": "Rəsulzadə",
+            "tip": "taksi",
+            "mesafe_km": 5.11,
+            "sure_dk": 6,
+            "aciklama": "Bülbülə → Rəsulzadə arasında taksi ile seyahat."
+        },
+        {
+            "from": "Rəsulzadə",
+            "to": "Tofiq Bahramov",
+            "tip": "yurume",
+            "mesafe_km": 3.84,
+            "sure_dk": 46,
+            "aciklama": "Rəsulzadə → Tofiq Bahramov arasında yurume ile seyahat."
+        },
+        {
+            "from": "Tofiq Bahramov",
+            "to": "Zəğulba",
+            "tip": "metro",
+            "mesafe_km": 5.21,
+            "sure_dk": 8,
+            "aciklama": "Tofiq Bahramov → Zəğulba arasında metro ile seyahat.",
+            "hat": "46"
+        },
+        {
+            "from": "Zəğulba",
+            "to": "Həmidli",
+            "tip": "otobus",
+            "mesafe_km": 3.12,
+            "sure_dk": 6,
+            "aciklama": "Zəğulba → Həmidli arasında otobus ile seyahat.",
+            "hat": "47"
+        },
+        {
+            "from": "Həmidli",
+            "to": "Yeni Günəşli",
+            "tip": "taksi",
+            "mesafe_km": 7.36,
+            "sure_dk": 9,
+            "aciklama": "Həmidli → Yeni Günəşli arasında taksi ile seyahat."
+        },
+        {
+            "from": "Yeni Günəşli",
+            "to": "Kürdəxanı",
+            "tip": "yurume",
+            "mesafe_km": 9.06,
+            "sure_dk": 109,
+            "aciklama": "Yeni Günəşli → Kürdəxanı arasında yurume ile seyahat."
+        },
+        {
+            "from": "Kürdəxanı",
+            "to": "Masazır",
+            "tip": "metro",
+            "mesafe_km": 2.31,
+            "sure_dk": 3,
+            "aciklama": "Kürdəxanı → Masazır arasında metro ile seyahat.",
+            "hat": "50"
+        },
+        {
+            "from": "Masazır",
+            "to": "Saray",
+            "tip": "otobus",
+            "mesafe_km": 5.94,
+            "sure_dk": 12,
+            "aciklama": "Masazır → Saray arasında otobus ile seyahat.",
+            "hat": "51"
+        },
+        {
+            "from": "Saray",
+            "to": "Novxanı",
+            "tip": "taksi",
+            "mesafe_km": 5.26,
+            "sure_dk": 6,
+            "aciklama": "Saray → Novxanı arasında taksi ile seyahat."
+        },
+        {
+            "from": "Novxanı",
+            "to": "Qızıldaş",
+            "tip": "yurume",
+            "mesafe_km": 16.13,
+            "sure_dk": 194,
+            "aciklama": "Novxanı → Qızıldaş arasında yurume ile seyahat."
+        },
+        {
+            "from": "Qızıldaş",
+            "to": "Hökmdar",
+            "tip": "metro",
+            "mesafe_km": 13.23,
+            "sure_dk": 20,
+            "aciklama": "Qızıldaş → Hökmdar arasında metro ile seyahat.",
+            "hat": "54"
+        },
+        {
+            "from": "Hökmdar",
+            "to": "Heydər",
+            "tip": "otobus",
+            "mesafe_km": 2.32,
+            "sure_dk": 5,
+            "aciklama": "Hökmdar → Heydər arasında otobus ile seyahat.",
+            "hat": "55"
+        },
+        {
+            "from": "Heydər",
+            "to": "Şüvəlan-2",
+            "tip": "taksi",
+            "mesafe_km": 6.19,
+            "sure_dk": 7,
+            "aciklama": "Heydər → Şüvəlan-2 arasında taksi ile seyahat."
+        },
+        {
+            "from": "Şüvəlan-2",
+            "to": "Abşeron",
+            "tip": "yurume",
+            "mesafe_km": 3.86,
+            "sure_dk": 46,
+            "aciklama": "Şüvəlan-2 → Abşeron arasında yurume ile seyahat."
+        }
+    ]
+}
