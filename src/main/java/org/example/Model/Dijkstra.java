@@ -10,8 +10,11 @@ public class Dijkstra {
     }
 
     public List<List<Node>> findShortestPath(Node start, Node end) {
-        if (!graph.containsKey(start) || !graph.containsKey(end)) {
-            return Collections.emptyList();
+        if (!graph.containsKey(start)) {
+            graph.put(start, new ArrayList<>()); // Add start node temporarily
+        }
+        if (!graph.containsKey(end)) {
+            graph.put(end, new ArrayList<>()); // Add end node temporarily
         }
 
         Map<Node, Double> dist = new HashMap<>();
@@ -55,6 +58,14 @@ public class Dijkstra {
         }
         if (current == start) path.add(0, start);
         steps.add(path);
+
+        // Clean up temporary nodes
+        if (graph.get(start).isEmpty()) {
+            graph.remove(start);
+        }
+        if (graph.get(end).isEmpty()) {
+            graph.remove(end);
+        }
 
         return steps;
     }
