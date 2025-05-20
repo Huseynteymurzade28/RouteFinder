@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-T">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OpenStreetMap with OpenLayers</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/ol@v9.1.0/ol.css">
+    <link rel="stylesheet" href="css/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/ol@v9.1.0/dist/ol.js"></script>
+</head>
+<body>
+    <h1>My OpenStreetMap</h1>
+    <div id="map" class="map"></div>
+    <div id="info-panel" style="display: none; padding: 10px; background-color: #f0f0f0; border: 1px solid #ccc; margin-top: 10px;">
+        <h2>Route Information</h2>
+        <p>Select two points on the map to see route recommendations.</p>
+        <div id="route-details">
+            <!-- Route details will be populated here -->
+        </div>
+    </div>
+    <script src="js/script.js"></script>
+</body>
+</html>
