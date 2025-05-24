@@ -1,0 +1,19 @@
+/* Basic styles */
+body {
+    font-family: sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+.map {
+    width: 100%;
+    height: 500px;
+    border: 1px solid black;
+}
+
+#info-panel {
+    padding: 10px;
+    background-color: #f0f0f0;
+    border: 1px solid #ccc;
+    margin-top: 10px;
+}

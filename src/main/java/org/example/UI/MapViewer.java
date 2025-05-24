@@ -353,7 +353,7 @@ public class MapViewer {
                 .map(Node::getPosition)
                 .collect(Collectors.toList());
 
-        shortestPathPainter = new RoutePainter(selectedRoute, Color.RED);
+        shortestPathPainter = new RoutePainter(selectedRoute); // Removed Color.RED
         shortestPathPainter.setStrokeWidth(5);
 
         animateRouteFadeIn();

@@ -1,8 +1,11 @@
 package org.example.Model;
 
-import org.jxmapviewer.viewer.GeoPosition;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 public class Graph {
     private final Map<Node, List<Edge>> adjacencyMap = new HashMap<>();

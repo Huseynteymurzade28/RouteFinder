@@ -164,6 +164,15 @@
         },
         {
             "from": "20 Yanvar",
+            "to": "Memar Əcəmi",
+            "tip": "metro",
+            "hat": "M3",
+            "mesafe_km": 0.8,
+            "sure_dk": 2,
+            "aciklama": "20 Yanvar ve Memar Əcəmi istasyonları arasında yeni M3 metro hattı."
+        },
+        {
+            "from": "20 Yanvar",
             "to": "Cəfər Cabbarlı",
             "tip": "taksi",
             "mesafe_km": 1.73,
@@ -483,6 +492,23 @@
             "mesafe_km": 3.86,
             "sure_dk": 46,
             "aciklama": "Şüvəlan-2 → Abşeron arasında yurume ile seyahat."
+        },
+        {
+            "from": "Nizami",
+            "to": "Sahil",
+            "tip": "yurume",
+            "mesafe_km": 1.1,
+            "sure_dk": 13,
+            "aciklama": "Nizami ve Sahil arasında keyifli bir yürüyüş güzergahı."
+        },
+        {
+            "from": "İçərişəhər",
+            "to": "Gənclik",
+            "tip": "otobus",
+            "hat": "Y1",
+            "mesafe_km": 0.6,
+            "sure_dk": 5,
+            "aciklama": "İçərişəhər'den Gənclik Parkı'na Y1 numaralı otobüs ile direkt ulaşım."
         }
     ]
 }
