@@ -1,100 +1,133 @@
 /* Basic styles */
+:root {
+    --bg-primary: #1A1D24; /* Deep, dark blue-black */
+    --bg-secondary: #252A34; /* Slightly lighter panel background */
+    --bg-tertiary: #303642; /* Even lighter for hover or active states */
+    --text-primary: #EAEAEA; /* Off-white */
+    --text-secondary: #B0B0B0; /* Lighter grey for less important text */
+    --accent-primary: #00CFE8; /* Bright Cyan/Aqua */
+    --accent-secondary: #FF4081; /* Vibrant Pink/Magenta */
+    --accent-success: #00E676; /* Bright Green for success - used in JS */
+    --accent-warning: #FFC400; /* Amber/Yellow for warning - used in JS */
+    --accent-danger: #FF5252; /* For errors - used in JS */
+    --border-color: #3A3F4A; /* Subtle border color */
+    --shadow-color: rgba(0, 0, 0, 0.5); /* Deeper shadow for more contrast */
+    --font-main: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    --transition-speed: 0.3s;
+    --animation-duration: 0.7s;
+}
+
 body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-family: var(--font-main);
     margin: 0;
     padding: 0;
-    background-color: #2c3e50; /* Dark blue-grey background */
-    color: #ecf0f1; /* Light grey text */
+    background: linear-gradient(135deg, var(--bg-primary) 0%, #23272F 100%); /* Gradient background */
+    color: var(--text-primary);
     line-height: 1.6;
     overflow-x: hidden; /* Prevent horizontal scroll */
 }
 
 h1 {
     text-align: center;
-    padding: 20px 0;
-    margin: 0 0 20px 0;
-    background-color: #34495e; /* Slightly lighter blue-grey for header */
-    color: #ecf0f1;
-    border-bottom: 3px solid #e74c3c; /* Accent color border */
-    animation: fadeInDown 1s ease-out;
+    padding: 25px 0; /* Increased padding */
+    margin: 0 0 30px 0; /* Increased margin */
+    background-color: var(--bg-secondary);
+    color: var(--accent-primary); /* Use accent for title */
+    border-bottom: 4px solid var(--accent-secondary); /* Thicker, different accent border */
+    animation: fadeInDown var(--animation-duration) ease-out;
+    text-shadow: 0 0 10px rgba(0, 207, 232, 0.5); /* Subtle glow for accent color */
 }
 
 .map {
     width: 90%;
     max-width: 1200px;
-    height: 500px;
-    margin: 0 auto 20px auto;
-    border: 5px solid #34495e;
-    border-radius: 8px;
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
-    animation: zoomIn 0.8s ease-out;
+    height: 550px; /* Slightly taller */
+    margin: 0 auto 30px auto; /* Increased margin */
+    border: 3px solid var(--border-color); /* Thinner, more subtle border */
+    border-radius: 12px; /* More rounded */
+    box-shadow: 0 15px 30px var(--shadow-color); /* Deeper shadow */
+    animation: zoomIn var(--animation-duration) ease-out;
+    overflow: hidden; /* Ensure content respects border-radius */
 }
 
 #info-panel {
     width: 90%;
     max-width: 1200px;
-    margin: 20px auto;
-    padding: 20px;
-    background-color: #34495e;
-    border: 1px solid #4a627a;
-    border-radius: 8px;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-    animation: fadeInUp 1s ease-out;
-    transition: all 0.3s ease-in-out;
+    margin: 30px auto; /* Increased margin */
+    padding: 25px; /* Increased padding */
+    background-color: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: 12px; /* More rounded */
+    box-shadow: 0 8px 25px var(--shadow-color); /* Adjusted shadow */
+    animation: fadeInUp var(--animation-duration) ease-out;
+    transition: all var(--transition-speed) ease-in-out;
 }
 
 #info-panel h2 {
-    color: #e74c3c; /* Accent color for heading */
+    color: var(--accent-secondary); /* Use another accent for heading */
     margin-top: 0;
-    border-bottom: 2px solid #4a627a;
-    padding-bottom: 10px;
+    border-bottom: 2px solid var(--border-color);
+    padding-bottom: 15px; /* Increased padding */
+    text-shadow: 0 0 8px rgba(255, 64, 129, 0.4); /* Subtle glow */
 }
 
 #status-label {
     text-align: center;
-    margin: 15px auto;
-    padding: 10px;
-    background-color: rgba(52, 73, 94, 0.8);
-    color: #ecf0f1;
-    border-radius: 5px;
+    margin: 20px auto; /* Increased margin */
+    padding: 12px 18px; /* Adjusted padding */
+    background-color: var(--bg-tertiary);
+    color: var(--text-primary);
+    border-radius: 8px; /* More rounded */
     width: fit-content;
-    max-width: 80%;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-    animation: fadeIn 1s ease-out; /* Adjusted initial animation */
-    transition: opacity 0.2s ease-in-out; /* Added for text change effect */
+    max-width: 85%;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.25);
+    animation: fadeIn var(--animation-duration) ease-out; /* Adjusted initial animation */
+    transition: opacity var(--transition-speed) ease-in-out, background-color var(--transition-speed) ease; /* Added for text change effect */
+    border-left: 4px solid var(--accent-primary); /* Accent line */
 }
+
+/* Add this class via JS to #status-label when it's updating */
+#status-label.updating {
+    animation: pulse 1.5s infinite ease-in-out;
+}
+
 
 #clear-selection-button {
     display: block;
-    margin: 15px auto;
-    padding: 10px 20px;
-    background-color: #e74c3c; /* Accent color */
+    margin: 25px auto; /* Increased margin */
+    padding: 12px 25px; /* Adjusted padding */
+    background-image: linear-gradient(to right, var(--accent-secondary), #FF6B9A); /* Gradient button */
     color: white;
     border: none;
-    border-radius: 5px;
+    border-radius: 8px; /* More rounded */
     cursor: pointer;
-    font-size: 1em;
-    transition: background-color 0.3s ease, transform 0.2s ease;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-    animation: fadeInUp 1s ease-out 0.2s; /* Added initial animation with slight delay */
+    font-size: 1.05em; /* Slightly larger font */
+    font-weight: bold;
+    transition: all var(--transition-speed) ease, transform 0.1s ease;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+    animation: fadeInUp var(--animation-duration) ease-out 0.2s; /* Added initial animation with slight delay */
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
 }
 
 #clear-selection-button:hover {
-    background-color: #c0392b; /* Darker accent */
-    transform: translateY(-2px);
+    background-image: linear-gradient(to right, #FF6B9A, var(--accent-secondary));
+    box-shadow: 0 6px 20px rgba(255, 64, 129, 0.5); /* Glow effect on hover */
+    transform: translateY(-3px) scale(1.02); /* Lift and slightly scale */
 }
 
 #clear-selection-button:active {
-    transform: translateY(0px);
+    transform: translateY(-1px) scale(1);
+    box-shadow: 0 2px 10px rgba(255, 64, 129, 0.4);
 }
 
 .route-summary p {
-    margin: 5px 0;
+    margin: 8px 0; /* Adjusted margin */
     font-size: 1.1em;
 }
 
 .route-summary strong {
-    color: #e74c3c;
+    color: var(--accent-primary); /* Changed accent */
 }
 
 .route-steps {
@@ -103,61 +136,66 @@ h1 {
 }
 
 .route-steps h3 {
-    color: #1abc9c; /* Another accent color */
-    margin-top: 15px;
-    border-bottom: 1px solid #4a627a;
-    padding-bottom: 5px;
+    color: var(--accent-primary); /* Another accent color */
+    margin-top: 20px; /* Increased margin */
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 8px; /* Adjusted padding */
 }
 .route-segments {
     list-style-type: none;
     padding-left: 0;
+    margin-top: 15px;
 }
 
 .segment-step {
-    background-color: #4a627a; /* Darker element background */
-    padding: 10px;
-    margin-bottom: 8px;
-    border-radius: 4px;
-    border-left: 5px solid #1abc9c; /* Accent border */
-    transition: transform 0.2s ease-in-out;
+    background-color: var(--bg-tertiary); /* Darker element background */
+    padding: 12px 15px; /* Adjusted padding */
+    margin-bottom: 10px; /* Adjusted margin */
+    border-radius: 6px; /* More rounded */
+    border-left: 5px solid var(--accent-primary); /* Accent border */
+    transition: transform var(--transition-speed) ease-in-out, background-color var(--transition-speed) ease, border-left-color var(--transition-speed) ease;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.15);
 }
 
 .segment-step:hover {
-    transform: translateX(5px);
+    transform: translateX(8px) scale(1.01); /* More pronounced hover */
+    background-color: #3B414E; /* Slightly lighter on hover */
+    border-left-color: var(--accent-secondary); /* Change accent on hover */
 }
 
 .segment-step .transport-icon {
     display: inline-block;
-    width: 20px; /* Adjust as needed */
-    height: 20px; /* Adjust as needed */
-    margin-right: 8px;
+    width: 22px; /* Adjust as needed */
+    height: 22px; /* Adjust as needed */
+    margin-right: 10px; /* Spacing */
     vertical-align: middle;
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center;
+    filter: drop-shadow(0 0 2px var(--accent-primary)); /* Icon glow */
 }
 
-/* Add your own icons here */
-.transport-icon.walking { background-image: url('https://img.icons8.com/ios-filled/50/ffffff/walking.png'); }
-.transport-icon.bus { background-image: url('https://img.icons8.com/ios-filled/50/ffffff/bus.png'); }
-.transport-icon.metro { background-image: url('https://img.icons8.com/ios-filled/50/ffffff/subway.png'); }
-.transport-icon.train { background-image: url('https://img.icons8.com/ios-filled/50/ffffff/train.png'); }
-.transport-icon.taxi { background-image: url('https://img.icons8.com/ios-filled/50/ffffff/taxi.png'); }
-.transport-icon.unknown { background-image: url('https://img.icons8.com/ios-filled/50/ffffff/question-mark.png'); }
+/* Updated icon URLs to use accent color from icons8. Consider hosting them or using SVG. */
+.transport-icon.walking { background-image: url('https://img.icons8.com/ios-filled/50/00CFE8/walking.png'); }
+.transport-icon.bus { background-image: url('https://img.icons8.com/ios-filled/50/00CFE8/bus.png'); }
+.transport-icon.metro { background-image: url('https://img.icons8.com/ios-filled/50/00CFE8/subway.png'); }
+.transport-icon.train { background-image: url('https://img.icons8.com/ios-filled/50/00CFE8/train.png'); }
+.transport-icon.taxi { background-image: url('https://img.icons8.com/ios-filled/50/00CFE8/taxi.png'); }
+.transport-icon.unknown { background-image: url('https://img.icons8.com/ios-filled/50/B0B0B0/question-mark.png'); } /* Secondary text color for unknown */
 
 
 .osrm-credit {
-    font-size: 0.8em;
+    font-size: 0.85em; /* Slightly larger */
     text-align: right;
-    color: #bdc3c7; /* Lighter grey for less important text */
-    margin-top: 15px;
+    color: var(--text-secondary); /* Lighter grey for less important text */
+    margin-top: 20px; /* Increased margin */
 }
 
 /* Keyframe animations */
 @keyframes fadeInDown {
     from {
         opacity: 0;
-        transform: translateY(-20px);
+        transform: translateY(-30px); /* Slightly more distance */
     }
     to {
         opacity: 1;
@@ -168,7 +206,7 @@ h1 {
 @keyframes fadeInUp {
     from {
         opacity: 0;
-        transform: translateY(20px);
+        transform: translateY(30px); /* Slightly more distance */
     }
     to {
         opacity: 1;
@@ -179,7 +217,7 @@ h1 {
 @keyframes zoomIn {
     from {
         opacity: 0;
-        transform: scale(0.95);
+        transform: scale(0.9); /* More noticeable zoom */
     }
     to {
         opacity: 1;
@@ -196,13 +234,48 @@ h1 {
     }
 }
 
+@keyframes pulse { /* For status label or other highlights */
+    0% { 
+        box-shadow: 0 0 0 0 rgba(0, 207, 232, 0.7), 0 4px 10px rgba(0,0,0,0.25); 
+        border-left-color: var(--accent-primary); 
+    }
+    50% { 
+        box-shadow: 0 0 0 5px rgba(0, 207, 232, 0), 0 4px 10px rgba(0,0,0,0.25); 
+        border-left-color: var(--accent-secondary); 
+    }
+    100% { 
+        box-shadow: 0 0 0 0 rgba(0, 207, 232, 0.7), 0 4px 10px rgba(0,0,0,0.25); 
+        border-left-color: var(--accent-primary); 
+    }
+}
+
+
 /* Responsive adjustments */
 @media (max-width: 768px) {
     .map, #info-panel {
         width: 95%;
+        margin-left: auto; /* Ensure centering */
+        margin-right: auto; /* Ensure centering */
     }
 
     h1 {
-        font-size: 1.8em;
+        font-size: 1.6em; /* Adjusted for smaller screens */
+        padding: 20px 0;
     }
+    #info-panel {
+        padding: 20px;
+    }
+    #clear-selection-button {
+        padding: 10px 20px;
+        font-size: 1em;
+    }
+    .segment-step {
+        padding: 10px;
+    }
+}
+
+/* Added a general interactive class for potential future use */
+.interactive-element:hover {
+    filter: brightness(1.1);
+    transform: scale(1.03);
 }

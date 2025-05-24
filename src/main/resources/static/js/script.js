@@ -61,7 +61,7 @@ document.addEventListener('DOMContentLoaded', () => {
         source: routeLayerSource,
         style: new ol.style.Style({
             stroke: new ol.style.Stroke({
-                color: 'rgba(0, 123, 255, 0.8)', 
+                color: '#00FFFF', // Aqua/Cyan for route lines
                 width: 4 
             })
         })
@@ -97,7 +97,7 @@ document.addEventListener('DOMContentLoaded', () => {
             console.error('Error fetching nodes:', error);
             if (infoPanel) {
                 infoPanel.style.display = 'block';
-                routeDetailsDiv.innerHTML = '<p style="color: red;">Error fetching map data. Please ensure the backend is running.</p>';
+                routeDetailsDiv.innerHTML = '<p style="color: #FF1744;">Error fetching map data. Please ensure the backend is running.</p>';
             }
         }
     }
@@ -122,7 +122,7 @@ document.addEventListener('DOMContentLoaded', () => {
             style: new ol.style.Style({
                 image: new ol.style.Circle({
                     radius: 5, // Smaller radius for general stations
-                    fill: new ol.style.Fill({color: 'rgba(0, 0, 255, 0.6)'}),
+                    fill: new ol.style.Fill({color: 'rgba(50, 127, 168)'}), // BlueViolet for station markers
                     stroke: new ol.style.Stroke({color: 'white', width: 1})
                 })
             })
@@ -158,7 +158,7 @@ document.addEventListener('DOMContentLoaded', () => {
         routeLayerSource.clear();
 
         if (!currentStartPoint.nearestStationNode || !currentEndPoint.nearestStationNode) {
-            routeDetailsDiv.innerHTML = `<p style="color: red;">Error: Could not identify nearest stations for routing.</p>`;
+            routeDetailsDiv.innerHTML = `<p style="color: #FF1744;">Error: Could not identify nearest stations for routing.</p>`;
             updateStatusLabel(`Error in station identification.`);
             return;
         }
@@ -175,8 +175,8 @@ document.addEventListener('DOMContentLoaded', () => {
             await drawDetailedStreetRoute(currentStartPoint, currentEndPoint, routeSegments); 
 
             let routeInfoHtml = `<div class="route-summary">\
-                                    <p style ="color: green"><strong>From:</strong> Your selected start point (Nearest: ${currentStartPoint.nearestStationNode.id})</p>\
-                                    <p style="color: green"><strong>To:</strong> Your selected end point (Nearest: ${currentEndPoint.nearestStationNode.id})</p>\
+                                    <p style ="color: #00E676"><strong>From:</strong> Your selected start point (Nearest: ${currentStartPoint.nearestStationNode.id})</p>\
+                                    <p style="color: #00E676"><strong>To:</strong> Your selected end point (Nearest: ${currentEndPoint.nearestStationNode.id})</p>\
                                  </div>`;
             
             let totalTime = 0;
@@ -240,7 +240,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         } catch (error) {
             console.error('Error fetching or displaying route:', error);
-            routeDetailsDiv.innerHTML = `<p style="color: red;">Error: ${error.message}.</p>`;
+            routeDetailsDiv.innerHTML = `<p style="color: #FF1744;">Error: ${error.message}.</p>`;
             updateStatusLabel(`Error calculating route.`);
             // Fallback to direct street routing if backend fails significantly
             await drawDetailedStreetRoute(currentStartPoint, currentEndPoint, []); // Pass empty array for segments
@@ -304,7 +304,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (osrmPoints.length < 2) {
             console.warn("Not enough distinct points for OSRM routing.", osrmPoints);
             let detailMsg = routeDetailsDiv.innerHTML;
-            detailMsg += '<p style="color: orange;">Could not form a valid path for street-level routing (points might be too close or identical).</p>';
+            detailMsg += '<p style="color: #FFC400;">Could not form a valid path for street-level routing (points might be too close or identical).</p>';
             routeDetailsDiv.innerHTML = detailMsg;
             return;
         }
@@ -333,7 +333,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         } catch (error) {
             console.error('Error fetching or drawing OSRM main route:', error);
-            routeDetailsDiv.innerHTML += `<p style="color: red;">Could not display detailed street map: ${error.message}</p>`;
+            routeDetailsDiv.innerHTML += `<p style="color: #FF1744;">Could not display detailed street map: ${error.message}</p>`;
             updateStatusLabel(`Error displaying street map.`);
             // Fallback: draw straight lines between the osrmPoints if OSRM fails for the whole path
             const fallbackCoordsList = osrmPoints.map(pStr => {
