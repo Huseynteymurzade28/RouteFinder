@@ -235,9 +235,10 @@ public class MapViewer {
             Map<String, Node> nodeMapByName = new HashMap<>();
             for (Map<String, Object> station : stopsAndStations) {
                 String name = (String) station.get("name");
-                double latitude = (double) station.get("latitude");
-                double longitude = (double) station.get("longitude");
-                Node node = new Node(name, latitude, longitude);
+                double latitude = ((Number) station.get("latitude")).doubleValue(); // Ensure correct type casting
+                double longitude = ((Number) station.get("longitude")).doubleValue(); // Ensure correct type casting
+                String type = (String) station.get("type"); // Read station type from JSON
+                Node node = new Node(name, latitude, longitude, type); // Pass type to Node constructor
                 nodes.add(node);
                 nodeMapByName.put(name, node);
                 graph.put(node, new ArrayList<>());
@@ -251,18 +252,47 @@ public class MapViewer {
                 for (com.fasterxml.jackson.databind.JsonNode segmentNode : segmentsNode) {
                     String fromName = segmentNode.get("from").asText();
                     String toName = segmentNode.get("to").asText();
+                    String transportTypeJson = segmentNode.get("tip").asText();
+                    double time = segmentNode.get("sure_dk").asDouble();
+                    // String hat = segmentNode.has("hat") ? segmentNode.get("hat").asText() : null; // Example of getting optional field
+
                     Node fromNode = nodeMapByName.get(fromName);
                     Node toNode = nodeMapByName.get(toName);
+
+                    String transportType;
+                    switch (transportTypeJson.toLowerCase()) {
+                        case "yurume":
+                            transportType = "walking";
+                            break;
+                        case "otobus":
+                            transportType = "bus";
+                            break;
+                        case "metro":
+                            transportType = "metro";
+                            break;
+                        case "train":
+                            transportType = "train";
+                            break;
+                        case "taksi":
+                             transportType = "taxi";
+                             break;
+                        default:
+                            transportType = "unknown";
+                            break;
+                    }
 
                     if (fromNode != null && toNode != null) {
                         double distance = calculateHaversineDistance(
                                 fromNode.getPosition().getLatitude(), fromNode.getPosition().getLongitude(),
                                 toNode.getPosition().getLatitude(), toNode.getPosition().getLongitude()
                         );
-                        // Add edge from -> to
-                        graph.get(fromNode).add(new Edge(fromNode, toNode, distance));
-                        // Add reverse edge to -> from, assuming segments are bidirectional
-                        graph.get(toNode).add(new Edge(toNode, fromNode, distance));
+                        // Add edge with all details
+                        Edge forwardEdge = new Edge(fromNode, toNode, distance, transportType, time);
+                        graph.get(fromNode).add(forwardEdge);
+                        
+                        // Assuming bidirectional, create and add the reverse edge
+                        Edge backwardEdge = new Edge(toNode, fromNode, distance, transportType, time);
+                        graph.get(toNode).add(backwardEdge);
                     }
                 }
             }

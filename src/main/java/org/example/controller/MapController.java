@@ -3,6 +3,7 @@ package org.example.controller;
 import java.util.List;
 
 import org.example.dto.NodeDTO;
+import org.example.dto.RouteSegmentDTO; // Added import
 import org.example.service.GraphService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -27,7 +28,7 @@ public class MapController {
     }
 
     @GetMapping("/route")
-    public List<NodeDTO> getRoute(@RequestParam String startNodeId, @RequestParam String endNodeId) {
+    public List<RouteSegmentDTO> getRoute(@RequestParam String startNodeId, @RequestParam String endNodeId) {
         return graphService.findShortestPath(startNodeId, endNodeId);
     }
 }

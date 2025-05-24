@@ -1,19 +1,208 @@
 /* Basic styles */
 body {
-    font-family: sans-serif;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     margin: 0;
     padding: 0;
+    background-color: #2c3e50; /* Dark blue-grey background */
+    color: #ecf0f1; /* Light grey text */
+    line-height: 1.6;
+    overflow-x: hidden; /* Prevent horizontal scroll */
+}
+
+h1 {
+    text-align: center;
+    padding: 20px 0;
+    margin: 0 0 20px 0;
+    background-color: #34495e; /* Slightly lighter blue-grey for header */
+    color: #ecf0f1;
+    border-bottom: 3px solid #e74c3c; /* Accent color border */
+    animation: fadeInDown 1s ease-out;
 }
 
 .map {
-    width: 100%;
+    width: 90%;
+    max-width: 1200px;
     height: 500px;
-    border: 1px solid black;
+    margin: 0 auto 20px auto;
+    border: 5px solid #34495e;
+    border-radius: 8px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+    animation: zoomIn 0.8s ease-out;
 }
 
 #info-panel {
+    width: 90%;
+    max-width: 1200px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #34495e;
+    border: 1px solid #4a627a;
+    border-radius: 8px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    animation: fadeInUp 1s ease-out;
+    transition: all 0.3s ease-in-out;
+}
+
+#info-panel h2 {
+    color: #e74c3c; /* Accent color for heading */
+    margin-top: 0;
+    border-bottom: 2px solid #4a627a;
+    padding-bottom: 10px;
+}
+
+#status-label {
+    text-align: center;
+    margin: 15px auto;
     padding: 10px;
-    background-color: #f0f0f0;
-    border: 1px solid #ccc;
-    margin-top: 10px;
+    background-color: rgba(52, 73, 94, 0.8);
+    color: #ecf0f1;
+    border-radius: 5px;
+    width: fit-content;
+    max-width: 80%;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    animation: fadeIn 1s ease-out; /* Adjusted initial animation */
+    transition: opacity 0.2s ease-in-out; /* Added for text change effect */
+}
+
+#clear-selection-button {
+    display: block;
+    margin: 15px auto;
+    padding: 10px 20px;
+    background-color: #e74c3c; /* Accent color */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1em;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    animation: fadeInUp 1s ease-out 0.2s; /* Added initial animation with slight delay */
+}
+
+#clear-selection-button:hover {
+    background-color: #c0392b; /* Darker accent */
+    transform: translateY(-2px);
+}
+
+#clear-selection-button:active {
+    transform: translateY(0px);
+}
+
+.route-summary p {
+    margin: 5px 0;
+    font-size: 1.1em;
+}
+
+.route-summary strong {
+    color: #e74c3c;
+}
+
+.route-steps {
+    list-style: none;
+    padding-left: 0;
+}
+
+.route-steps h3 {
+    color: #1abc9c; /* Another accent color */
+    margin-top: 15px;
+    border-bottom: 1px solid #4a627a;
+    padding-bottom: 5px;
+}
+.route-segments {
+    list-style-type: none;
+    padding-left: 0;
+}
+
+.segment-step {
+    background-color: #4a627a; /* Darker element background */
+    padding: 10px;
+    margin-bottom: 8px;
+    border-radius: 4px;
+    border-left: 5px solid #1abc9c; /* Accent border */
+    transition: transform 0.2s ease-in-out;
+}
+
+.segment-step:hover {
+    transform: translateX(5px);
+}
+
+.segment-step .transport-icon {
+    display: inline-block;
+    width: 20px; /* Adjust as needed */
+    height: 20px; /* Adjust as needed */
+    margin-right: 8px;
+    vertical-align: middle;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+/* Add your own icons here */
+.transport-icon.walking { background-image: url('https://img.icons8.com/ios-filled/50/ffffff/walking.png'); }
+.transport-icon.bus { background-image: url('https://img.icons8.com/ios-filled/50/ffffff/bus.png'); }
+.transport-icon.metro { background-image: url('https://img.icons8.com/ios-filled/50/ffffff/subway.png'); }
+.transport-icon.train { background-image: url('https://img.icons8.com/ios-filled/50/ffffff/train.png'); }
+.transport-icon.taxi { background-image: url('https://img.icons8.com/ios-filled/50/ffffff/taxi.png'); }
+.transport-icon.unknown { background-image: url('https://img.icons8.com/ios-filled/50/ffffff/question-mark.png'); }
+
+
+.osrm-credit {
+    font-size: 0.8em;
+    text-align: right;
+    color: #bdc3c7; /* Lighter grey for less important text */
+    margin-top: 15px;
+}
+
+/* Keyframe animations */
+@keyframes fadeInDown {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes zoomIn {
+    from {
+        opacity: 0;
+        transform: scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .map, #info-panel {
+        width: 95%;
+    }
+
+    h1 {
+        font-size: 1.8em;
+    }
 }

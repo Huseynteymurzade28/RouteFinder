@@ -32,6 +32,30 @@ document.addEventListener('DOMContentLoaded', () => {
     const infoPanel = document.getElementById('info-panel');
     const routeDetailsDiv = document.getElementById('route-details');
 
+    // Helper function to get random stations
+    function getRandomStations(count, nodesList, excludeNodes = []) {
+        if (!nodesList || nodesList.length === 0) return [];
+        const eligibleNodes = nodesList.filter(node =>
+            node.type && // Ensure node has a type, implying it\'s a station
+            !excludeNodes.some(excludeNode => excludeNode && excludeNode.id === node.id)
+        );
+        if (eligibleNodes.length === 0) return [];
+        const shuffled = eligibleNodes.sort(() => 0.5 - Math.random());
+        return shuffled.slice(0, Math.min(count, eligibleNodes.length)); // Ensure we don\'t try to slice more than available
+    }
+
+    // Function to update status label with a fade effect
+    function updateStatusLabel(text) {
+        statusLabel.style.opacity = '0'; // Fade out
+        setTimeout(() => {
+            statusLabel.textContent = text;
+            statusLabel.style.opacity = '1'; // Fade in
+        }, 200); // This duration should ideally match a CSS transition duration
+    }
+    // Set initial status
+    updateStatusLabel('Select your precise starting point on the map.');
+
+
     const routeLayerSource = new ol.source.Vector();
     const routeLayer = new ol.layer.Vector({
         source: routeLayerSource,
@@ -128,107 +152,166 @@ document.addEventListener('DOMContentLoaded', () => {
     // No longer using selectedPointsSource/Layer for nearest stations, only for actual clicks.
 
     async function fetchAndDisplayRoute(currentStartPoint, currentEndPoint) {
-        statusLabel.textContent = `Calculating route...`;
+        updateStatusLabel(`Calculating route...`);
         routeDetailsDiv.innerHTML = `<p>Fetching route information...</p>`;
         infoPanel.style.display = 'block';
-        routeLayerSource.clear(); 
+        routeLayerSource.clear();
 
         if (!currentStartPoint.nearestStationNode || !currentEndPoint.nearestStationNode) {
-            // This case should ideally be caught before calling this function
             routeDetailsDiv.innerHTML = `<p style="color: red;">Error: Could not identify nearest stations for routing.</p>`;
-            statusLabel.textContent = `Error in station identification.`;
+            updateStatusLabel(`Error in station identification.`);
             return;
         }
 
         try {
-            // Backend route uses nearest station IDs
             const backendResponse = await fetch(`/api/map/route?startNodeId=${encodeURIComponent(currentStartPoint.nearestStationNode.id)}&endNodeId=${encodeURIComponent(currentEndPoint.nearestStationNode.id)}`);
             if (!backendResponse.ok) {
                 const errorText = await backendResponse.text();
                 throw new Error(`Backend error! status: ${backendResponse.status}, message: ${errorText || 'Failed to fetch transit route'}`);
             }
-            const transitNodes = await backendResponse.json(); // These are the stations for the transit part
-            console.log('Transit route from backend:', transitNodes);
+            const routeSegments = await backendResponse.json(); // Expecting List<RouteSegmentDTO>
+            console.log('Route segments from backend:', routeSegments);
 
-            await drawDetailedStreetRoute(currentStartPoint, currentEndPoint, transitNodes);
+            await drawDetailedStreetRoute(currentStartPoint, currentEndPoint, routeSegments); 
+
+            let routeInfoHtml = `<div class="route-summary">\
+                                    <p style ="color: green"><strong>From:</strong> Your selected start point (Nearest: ${currentStartPoint.nearestStationNode.id})</p>\
+                                    <p style="color: green"><strong>To:</strong> Your selected end point (Nearest: ${currentEndPoint.nearestStationNode.id})</p>\
+                                 </div>`;
             
-            let routeInfoHtml = `<p><b>Route From:</b> Your selected start point</p>`;
-            routeInfoHtml += `<p><b>Nearest Start Station:</b> ${currentStartPoint.nearestStationNode.id}</p>`;
-            routeInfoHtml += `<p><b>To:</b> Your selected end point</p>`;
-            routeInfoHtml += `<p><b>Nearest End Station:</b> ${currentEndPoint.nearestStationNode.id}</p>`;
-            if (transitNodes && transitNodes.length > 0) {
-                 routeInfoHtml += '<p><b>Transit Stations:</b> ' + transitNodes.map(node => node.id).join(' -> ') + '</p>';
+            let totalTime = 0;
+
+            if (routeSegments && routeSegments.length > 0) {
+                routeInfoHtml += '<h4>Detailed Transit Path:</h4><ul class="route-segments">';
+                routeSegments.forEach(segment => {
+                    totalTime += parseFloat(segment.time);
+                    const fromNode = segment.fromNode;
+                    const toNode = segment.toNode;
+                    routeInfoHtml += `<li class="segment-step"> \
+                                        <span class="transport-icon ${segment.transportType.toLowerCase()}"></span> \
+                                        ${fromNode.id} (${fromNode.type || 'station'}) to ${toNode.id} (${toNode.type || 'station'}) \
+                                        - <em>${segment.transportType}</em>, approx. ${segment.time.toFixed(0)} min\
+                                     </li>`;
+                });
+                routeInfoHtml += '</ul>';
+                routeInfoHtml += `<p><strong>Estimated Total Transit Time:</strong> ${totalTime.toFixed(0)} minutes</p>`;
+            } else if (currentStartPoint.nearestStationNode && currentEndPoint.nearestStationNode && currentStartPoint.nearestStationNode.id !== currentEndPoint.nearestStationNode.id) {
+                // "Undefined Metro" / Approximate route
+                const randomIntermediates = getRandomStations(2, allNodes, [currentStartPoint.nearestStationNode, currentEndPoint.nearestStationNode]);
+                
+                const startNodePos = [currentStartPoint.nearestStationNode.position.longitude, currentStartPoint.nearestStationNode.position.latitude];
+                const endNodePos = [currentEndPoint.nearestStationNode.position.longitude, currentEndPoint.nearestStationNode.position.latitude];
+                const geoDistance = ol.sphere.getDistance(startNodePos, endNodePos); // meters
+
+                // Rough time: 3 min/km for travel + 4 min per "intermediate stop" + 5 min base
+                let approxTime = Math.max(15, Math.round( (geoDistance / 1000) * 3 + randomIntermediates.length * 4 + 5 )); 
+
+                routeInfoHtml += `<div class="approximate-route-suggestion">
+                                    <h4>Approximate Metro Route</h4>
+                                    <p>A detailed path couldn\'t be determined. Here\'s a suggested metro journey:</p>
+                                    <ul class="route-segments">`;
+                routeInfoHtml +=    `<li class="segment-step">
+                                        <span class="transport-icon metro"></span> 
+                                        Start at <strong>${currentStartPoint.nearestStationNode.id}</strong> (${currentStartPoint.nearestStationNode.type || 'Metro Station'})
+                                    </li>`;
+                randomIntermediates.forEach(station => {
+                    routeInfoHtml +=`<li class="segment-step">
+                                        <span class="transport-icon metro"></span> 
+                                        Pass through <em>${station.id}</em> (${station.type || 'Metro Station'})
+                                    </li>`;
+                });
+                routeInfoHtml +=    `<li class="segment-step">
+                                        <span class="transport-icon metro"></span> 
+                                        End at <strong>${currentEndPoint.nearestStationNode.id}</strong> (${currentEndPoint.nearestStationNode.type || 'Metro Station'})
+                                    </li>`;
+                routeInfoHtml += `</ul>
+                                  <p><strong>Estimated Approximate Time:</strong> ${approxTime} minutes</p>
+                                 </div>`;
+                totalTime = approxTime; // For consistency
+            } else if (currentStartPoint.nearestStationNode && currentEndPoint.nearestStationNode && currentStartPoint.nearestStationNode.id === currentEndPoint.nearestStationNode.id) {
+                 routeInfoHtml += `<p>Your start and end points are near the same station: ${currentStartPoint.nearestStationNode.id}. Street-level routing will be direct.</p>`;
             } else {
-                 routeInfoHtml += '<p><em>No specific transit station path, or direct routing between nearest stations.</em></p>';
+                routeInfoHtml += '<p><em>No route information available.</em></p>';
             }
-            routeInfoHtml += '<p><em>Displaying street-level route. Note: Uses OSRM demo server.</em></p>';
+
+            routeInfoHtml += '<p class="osrm-credit"><em>Street-level routing by OSRM.</em></p>';
             routeDetailsDiv.innerHTML = routeInfoHtml;
-            statusLabel.textContent = `Street-level route displayed.`;
+            updateStatusLabel(`Route displayed.`);
 
         } catch (error) {
             console.error('Error fetching or displaying route:', error);
-            // Fallback: Try to route directly between clicked points if backend/transit part fails
-            routeDetailsDiv.innerHTML = `<p style="color: orange;">Transit route failed: ${error.message}. Attempting direct street route between your points...</p>`;
-            statusLabel.textContent = `Transit route failed. Trying direct...`;
-            await drawDetailedStreetRoute(currentStartPoint, currentEndPoint, []); // Pass empty transitNodes for direct routing
+            routeDetailsDiv.innerHTML = `<p style="color: red;">Error: ${error.message}.</p>`;
+            updateStatusLabel(`Error calculating route.`);
+            // Fallback to direct street routing if backend fails significantly
+            await drawDetailedStreetRoute(currentStartPoint, currentEndPoint, []); // Pass empty array for segments
         }
     }
 
-    async function drawDetailedStreetRoute(actualStartPoint, actualEndPoint, transitNodes) {
+    async function drawDetailedStreetRoute(actualStartPoint, actualEndPoint, routeSegmentsList) {
         routeLayerSource.clear();
         const features = [];
-
         let osrmPoints = [];
 
-        // 1. From actual start click to the first transit station (or nearest start station)
-        const startClickCoords = `${actualStartPoint.clickedCoordsLonLat[0]},${actualStartPoint.clickedCoordsLonLat[1]}`;
-        let firstTransitNodePos = actualStartPoint.nearestStationNode.position; // Default to nearest if no transitNodes
-        if (transitNodes && transitNodes.length > 0) {
-            firstTransitNodePos = transitNodes[0].position;
+        const startClickLonLat = actualStartPoint.clickedCoordsLonLat;
+        const endClickLonLat = actualEndPoint.clickedCoordsLonLat;
+
+        // Ensure nearestStationNode and its position are available
+        const startNearestStationNode = actualStartPoint.nearestStationNode;
+        const endNearestStationNode = actualEndPoint.nearestStationNode;
+
+        // Simplified OSRM point construction
+        if (!startNearestStationNode || !startNearestStationNode.position || 
+            !endNearestStationNode || !endNearestStationNode.position) {
+            
+            console.warn("Nearest station data is incomplete for OSRM path planning. Routing directly between clicks.");
+            // Fallback to direct route between clicks if essential station data is missing
+            osrmPoints.push(`${startClickLonLat[0]},${startClickLonLat[1]}`);
+            osrmPoints.push(`${endClickLonLat[0]},${endClickLonLat[1]}`);
+        } else {
+            const startNearestStationPos = startNearestStationNode.position;
+            const endNearestStationPos = endNearestStationNode.position;
+
+            // 1. User's actual start click
+            osrmPoints.push(`${startClickLonLat[0]},${startClickLonLat[1]}`);
+
+            // 2. Nearest station to user's start click
+            osrmPoints.push(`${startNearestStationPos.longitude},${startNearestStationPos.latitude}`);
+
+            // 3. If the nearest stations are different, add the destination nearest station as a waypoint.
+            // This makes OSRM route from start_click -> start_station -> end_station -> end_click.
+            // If nearest stations are the same, OSRM routes start_click -> station -> end_click.
+            if (startNearestStationNode.id !== endNearestStationNode.id) {
+                osrmPoints.push(`${endNearestStationPos.longitude},${endNearestStationPos.latitude}`);
+            }
+            
+            // 4. User's actual end click
+            osrmPoints.push(`${endClickLonLat[0]},${endClickLonLat[1]}`);
         }
-        const firstLegToCoords = `${firstTransitNodePos.longitude},${firstTransitNodePos.latitude}`;
-        osrmPoints.push(startClickCoords);
-        osrmPoints.push(firstLegToCoords);
-
-
-        // 2. Between transit stations (if any)
-        if (transitNodes && transitNodes.length > 1) {
-            for (let i = 0; i < transitNodes.length -1; i++) { // OSRM takes current and next, so add next
-                 osrmPoints.push(`${transitNodes[i+1].position.longitude},${transitNodes[i+1].position.latitude}`);
+        
+        // Remove consecutive duplicates and ensure at least two distinct points for OSRM
+        let uniqueOsrmPoints = [];
+        if (osrmPoints.length > 0) {
+            uniqueOsrmPoints.push(osrmPoints[0]);
+            for (let i = 1; i < osrmPoints.length; i++) {
+                if (osrmPoints[i] !== osrmPoints[i-1]) {
+                    uniqueOsrmPoints.push(osrmPoints[i]);
+                }
             }
         }
-        
-        // 3. From last transit station (or nearest end station) to actual end click
-        let lastTransitNodePos = actualEndPoint.nearestStationNode.position; // Default to nearest if no transitNodes
-         if (transitNodes && transitNodes.length > 0) {
-            lastTransitNodePos = transitNodes[transitNodes.length - 1].position;
-        }
-        // Ensure lastTransitNodePos is added if it's different from the last point in osrmPoints
-        const lastOsrmPointStr = osrmPoints[osrmPoints.length -1];
-        const lastTransitNodePosStr = `${lastTransitNodePos.longitude},${lastTransitNodePos.latitude}`;
-        if (lastOsrmPointStr !== lastTransitNodePosStr) {
-            osrmPoints.push(lastTransitNodePosStr);
-        }
-
-        const endClickCoords = `${actualEndPoint.clickedCoordsLonLat[0]},${actualEndPoint.clickedCoordsLonLat[1]}`;
-        // Ensure endClickCoords is added if it's different from the last point in osrmPoints
-        if (osrmPoints[osrmPoints.length -1] !== endClickCoords) {
-             osrmPoints.push(endClickCoords);
-        }
-        
-        // Remove duplicates that might occur if click is on a station
-        osrmPoints = [...new Set(osrmPoints)];
+        osrmPoints = uniqueOsrmPoints;
 
 
         if (osrmPoints.length < 2) {
-            console.warn("Not enough distinct points for OSRM routing.");
-            routeDetailsDiv.innerHTML += '<p style="color: orange;">Could not form a valid path for street-level routing (points might be too close or identical).</p>'; // Corrected string
+            console.warn("Not enough distinct points for OSRM routing.", osrmPoints);
+            let detailMsg = routeDetailsDiv.innerHTML;
+            detailMsg += '<p style="color: orange;">Could not form a valid path for street-level routing (points might be too close or identical).</p>';
+            routeDetailsDiv.innerHTML = detailMsg;
             return;
         }
         
         const osrmUrl = `http://router.project-osrm.org/route/v1/driving/${osrmPoints.join(';')}?overview=full&geometries=geojson`;
         console.log("OSRM URL:", osrmUrl);
-        statusLabel.textContent = `Fetching detailed street path...`;
+        updateStatusLabel(`Fetching detailed street path...`);
 
         try {
             const response = await fetch(osrmUrl);
@@ -244,14 +327,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 features.push(geojsonFeature);
                 routeLayerSource.addFeatures(features);
                 console.log('Detailed street route drawn on map.');
-                statusLabel.textContent = `Street-level route displayed.`;
+                updateStatusLabel(`Street-level route displayed.`);
             } else {
                 throw new Error('No route found by OSRM.');
             }
         } catch (error) {
             console.error('Error fetching or drawing OSRM main route:', error);
             routeDetailsDiv.innerHTML += `<p style="color: red;">Could not display detailed street map: ${error.message}</p>`;
-            statusLabel.textContent = `Error displaying street map.`;
+            updateStatusLabel(`Error displaying street map.`);
             // Fallback: draw straight lines between the osrmPoints if OSRM fails for the whole path
             const fallbackCoordsList = osrmPoints.map(pStr => {
                 const [lon, lat] = pStr.split(',').map(Number);
@@ -279,7 +362,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (clickCount === 0) {
             startPoint = { clickedCoordsLonLat: clickedLonLat, nearestStationNode: identifiedNearestStation };
             clickCount++;
-            statusLabel.textContent = `Start point selected. Nearest station: ${startPoint.nearestStationNode.id}. Select your precise end point.`;
+            updateStatusLabel(`Start point selected. Nearest station: ${startPoint.nearestStationNode.id}. Select your precise end point.`);
             console.log("Start point:", startPoint);
 
             clickedPointsSource.clear(); 
@@ -327,7 +410,7 @@ document.addEventListener('DOMContentLoaded', () => {
         clickCount = 0;
         clickedPointsSource.clear(); // Clear precise click markers
         routeLayerSource.clear(); 
-        statusLabel.textContent = 'Select your precise starting point on the map.';
+        updateStatusLabel('Select your precise starting point on the map.');
         if (infoPanel) {
             infoPanel.style.display = 'none';
             routeDetailsDiv.innerHTML = '';

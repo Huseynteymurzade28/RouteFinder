@@ -8,6 +8,7 @@ import org.example.Model.Node; // Assuming this is your existing Node model
 import org.example.Model.Dijkstra; // Added import
 import org.example.dto.GeoPositionDTO;
 import org.example.dto.NodeDTO;
+import org.example.dto.RouteSegmentDTO; // Added import
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
 
@@ -47,7 +48,8 @@ public class GraphService {
                 String name = (String) station.get("name");
                 double latitude = ((Number) station.get("latitude")).doubleValue();
                 double longitude = ((Number) station.get("longitude")).doubleValue();
-                Node node = new Node(name, latitude, longitude);
+                String type = (String) station.get("type"); // Read station type
+                Node node = new Node(name, latitude, longitude, type); // Pass type to constructor
                 this.nodes.add(node);
                 this.graph.put(node, new ArrayList<>());
             }
@@ -70,16 +72,45 @@ public class GraphService {
                 for (JsonNode segmentNode : segmentsNode) {
                     String fromName = segmentNode.get("from").asText();
                     String toName = segmentNode.get("to").asText();
+                    String transportTypeJson = segmentNode.get("tip").asText();
+                    double time = segmentNode.get("sure_dk").asDouble();
+
                     Node fromNode = nodeMapByName.get(fromName);
                     Node toNode = nodeMapByName.get(toName);
+
+                    String transportType;
+                    switch (transportTypeJson.toLowerCase()) {
+                        case "yurume":
+                            transportType = "walking";
+                            break;
+                        case "otobus":
+                            transportType = "bus";
+                            break;
+                        case "metro":
+                            transportType = "metro";
+                            break;
+                        // Assuming "train" is not in current JSON, but can be added
+                        case "train":
+                            transportType = "train";
+                            break;
+                        case "taksi":
+                             transportType = "taxi"; // Or handle as a special case if not part of public transport
+                             break;
+                        default:
+                            transportType = "unknown"; // Or skip if type is not recognized
+                            break;
+                    }
+
 
                     if (fromNode != null && toNode != null) {
                         double distance = calculateHaversineDistance(
                                 fromNode.getPosition().getLatitude(), fromNode.getPosition().getLongitude(),
                                 toNode.getPosition().getLatitude(), toNode.getPosition().getLongitude()
                         );
-                        this.graph.get(fromNode).add(new Edge(fromNode, toNode, distance));
-                        this.graph.get(toNode).add(new Edge(toNode, fromNode, distance)); // Assuming bidirectional
+                        // Add edge with transport type and time
+                        this.graph.get(fromNode).add(new Edge(fromNode, toNode, distance, transportType, time));
+                        // Assuming bidirectional for now, adjust if not all transport types are bidirectional
+                        this.graph.get(toNode).add(new Edge(toNode, fromNode, distance, transportType, time));
                     }
                 }
             }
@@ -100,7 +131,7 @@ public class GraphService {
         return nodes;
     }
 
-    public List<NodeDTO> findShortestPath(String startNodeId, String endNodeId) {
+    public List<RouteSegmentDTO> findShortestPath(String startNodeId, String endNodeId) {
         Node startNode = nodes.stream().filter(node -> node.getId().equals(startNodeId)).findFirst().orElse(null);
         Node endNode = nodes.stream().filter(node -> node.getId().equals(endNodeId)).findFirst().orElse(null);
 
@@ -108,18 +139,48 @@ public class GraphService {
             return new ArrayList<>();
         }
 
-        Dijkstra dijkstra = new Dijkstra(this.graph);
-        List<List<Node>> paths = dijkstra.findShortestPath(startNode, endNode);
+        Dijkstra dijkstra = new Dijkstra(this.graph); // graph is Map<Node, List<Edge>>
+        List<List<Node>> allSteps = dijkstra.findShortestPath(startNode, endNode);
 
-        if (paths.isEmpty() || paths.get(paths.size() - 1).isEmpty()) {
+        if (allSteps.isEmpty()) {
+            return new ArrayList<>(); // No path found or error in Dijkstra
+        }
+        // Assuming Dijkstra.findShortestPath returns List<List<Node>> where the last list is the shortest path
+        List<Node> shortestPathNodes = allSteps.get(allSteps.size() - 1); 
+
+        if (shortestPathNodes.isEmpty() || shortestPathNodes.size() < 2) { // Path needs at least two nodes for a segment
             return new ArrayList<>();
         }
-        
-        List<Node> shortestPath = paths.get(paths.size() - 1);
 
-        return shortestPath.stream()
-                .map(this::convertToNodeDTO)
-                .collect(Collectors.toList());
+        List<RouteSegmentDTO> routeSegments = new ArrayList<>();
+        for (int i = 0; i < shortestPathNodes.size() - 1; i++) {
+            Node fromPathNode = shortestPathNodes.get(i);
+            Node toPathNode = shortestPathNodes.get(i + 1);
+
+            // Find the edge in the graph that connects fromPathNode to toPathNode
+            Edge connectingEdge = graph.get(fromPathNode).stream()
+                    .filter(edge -> edge.getTo().equals(toPathNode))
+                    .findFirst()
+                    .orElse(null); // Or throw an exception if an edge is expected but not found
+
+            if (connectingEdge != null) {
+                NodeDTO fromNodeDTO = convertToNodeDTO(fromPathNode);
+                NodeDTO toNodeDTO = convertToNodeDTO(toPathNode);
+                routeSegments.add(new RouteSegmentDTO(
+                        fromNodeDTO,
+                        toNodeDTO,
+                        connectingEdge.getTransportType(),
+                        connectingEdge.getTime(),
+                        connectingEdge.getWeight() // Corrected to use getWeight()
+                ));
+            } else {
+                // Handle case where no direct edge exists in the graph for a path segment from Dijkstra
+                // This might indicate an issue with the graph data or Dijkstra's output
+                // For now, we can skip this segment or log a warning
+                System.err.println("Warning: No direct edge found between " + fromPathNode.getId() + " and " + toPathNode.getId());
+            }
+        }
+        return routeSegments;
     }
 
     private NodeDTO convertToNodeDTO(Node node) {
@@ -127,7 +188,7 @@ public class GraphService {
                 node.getPosition().getLatitude(),
                 node.getPosition().getLongitude()
         );
-        return new NodeDTO(node.getId(), geoPositionDTO);
+        return new NodeDTO(node.getId(), geoPositionDTO, node.getType()); // Include type in DTO
     }
 
     private double calculateHaversineDistance(double lat1, double lon1, double lat2, double lon2) {

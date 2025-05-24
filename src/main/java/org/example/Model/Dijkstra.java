@@ -74,7 +74,7 @@ public class Dijkstra {
                     continue;
                 }
 
-                double newDist = dist.get(current) + edge.getWeight();
+                double newDist = dist.get(current) + edge.getTime(); // Changed from getWeight() to getTime()
                 // Ensure neighborNode is in dist map, which it should be if graph keys were used for init
                 if (newDist < dist.getOrDefault(neighborNode, Double.POSITIVE_INFINITY)) {
                     dist.put(neighborNode, newDist);
